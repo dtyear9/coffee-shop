@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cafe POS System</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f5f1ea;
+}
+
+header{
+    background:#5c3d2e;
+    color:white;
+    padding:15px;
+    text-align:center;
+    font-size:28px;
+    font-weight:bold;
+}
+
+.container{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
+    padding:20px;
+}
+
+.menu{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.menu h2,
+.cart h2{
+    margin-bottom:15px;
+}
+
+.items{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:15px;
+}
+
+.item{
+    background:#fff8f0;
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:15px;
+    text-align:center;
+}
+
+.item h3{
+    margin-bottom:10px;
+}
+
+.item button{
+    background:#6f4e37;
+    border:none;
+    color:white;
+    padding:8px 15px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.item button:hover{
+    background:#543726;
+}
+
+.cart{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+}
+
+.total{
+    margin-top:15px;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.checkout{
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+    background:#28a745;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.checkout:hover{
+    background:#218838;
+}
+
+.orders{
+    margin:20px;
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.order{
+    border:1px solid #ddd;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+.order-header{
+    display:flex;
+    justify-content:space-between;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.status{
+    color:#c97b00;
+}
+</style>
+</head>
+<body>
+
+<header>☕ Coffee Shop POS</header>
+
+<div class="container">
+
+    <div class="menu">
+        <h2>Menu</h2>
+        <div class="items" id="menu"></div>
+    </div>
+
+    <div class="cart">
+        <h2>Current Order</h2>
+
+        <div id="cartItems"></div>
+
+        <div class="total">
+            Total: £<span id="total">0.00</span>
+        </div>
+
+        <button class="checkout" onclick="completeOrder()">
+            Complete Order
+        </button>
+    </div>
+
+</div>
+
+<div class="orders">
+    <h2>Order Queue</h2>
+    <div id="orders"></div>
+</div>
+
+<script>
+const products = [
+    {name:"Espresso",price:2.50},
+    {name:"Latte",price:3.80},
+    {name:"Cappuccino",price:3.60},
+    {name:"Mocha",price:4.20},
+    {name:"Hot Chocolate",price:3.40},
+    {name:"Tea",price:2.20},
+    {name:"Croissant",price:2.50},
+    {name:"Blueberry Muffin",price:2.90}
+];
+
+let cart = [];
+let orders = [];
+
+const menu = document.getElementById("menu");
+
+products.forEach(product => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML = `
+        <h3>${product.name}</h3>
+        <p>£${product.price.toFixed(2)}</p>
+        <br>
+        <button onclick="addToCart('${product.name}', ${product.price})">
+            Add
+        </button>
+    `;
+    menu.appendChild(div);
+});
+
+function addToCart(name, price){
+    const existing = cart.find(item => item.name === name);
+
+    if(existing){
+        existing.qty++;
+    } else {
+        cart.push({
+            name,
+            price,
+            qty:1
+        });
+    }
+
+    updateCart();
+}
+
+function updateCart(){
+    const cartItems = document.getElementById("cartItems");
+    cartItems.innerHTML = "";
+
+    let total = 0;
+
+    cart.forEach(item => {
+        total += item.price * item.qty;
+
+        cartItems.innerHTML += `
+            <div class="cart-item">
+                <span>${item.name} x${item.qty}</span>
+                <span>£${(item.price * item.qty).toFixed(2)}</span>
+            </div>
+        `;
+    });
+
+    document.getElementById("total").textContent =
+        total.toFixed(2);
+}
+
+function completeOrder(){
+
+    if(cart.length === 0){
+        alert("No items in order.");
+        return;
+    }
+
+    const total = cart.reduce(
+        (sum, item) => sum + item.price * item.qty,
+        0
+    );
+
+    const order = {
+        id: "#" + Math.floor(Math.random()*10000),
+        items:[...cart],
+        total:total
+    };
+
+    orders.unshift(order);
+
+    cart = [];
+    updateCart();
+    updateOrders();
+}
+
+function updateOrders(){
+
+    const ordersDiv = document.getElementById("orders");
+    ordersDiv.innerHTML = "";
+
+    orders.forEach(order => {
+
+        const orderDiv = document.createElement("div");
+        orderDiv.className = "order";
+
+        orderDiv.innerHTML = `
+            <div class="order-header">
+                <span>${order.id}</span>
+                <span class="status">Preparing</span>
+            </div>
+
+            ${order.items.map(item =>
+                `<div>${item.name} x${item.qty}</div>`
+            ).join("")}
+
+            <br>
+            <strong>Total: £${order.total.toFixed(2)}</strong>
+        `;
+
+        ordersDiv.appendChild(orderDiv);
+    });
+}
+</script>
+
+</body>
+</html>
