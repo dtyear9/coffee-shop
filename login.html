@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DT Coffee Cafe Login</title>
 
-    <!-- Attempts to inherit styling from the coffee shop site -->
-    <link rel="stylesheetb.io/coffee-shop/style.css
-
-    <title>Coffee Shop Login</title>
+    <!-- Uses the site's existing CSS -->
+    <link rel="stylesheet".io/coffee-shop/style.css
 
     <style>
         body {
@@ -15,75 +14,54 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            font-family: Arial, sans-serif;
         }
 
         .login-box {
             background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             text-align: center;
+            width: 320px;
         }
 
-        input {
+        .login-box input,
+        .login-box button {
             width: 100%;
             padding: 10px;
-            margin: 10px 0;
+            margin-top: 10px;
         }
 
-        button {
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-
-        #error {
+        .error {
             color: red;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
-<div class="login-box">
-    <h2>Staff Login</h2>
+    <div class="login-box">
+        <h2>DT Coffee Cafe Login</h2>
 
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="login()">Login</button>
 
-    <p id="error"></p>
-</div>
+        <p class="error" id="error"></p>
+    </div>
 
-<script>
-(async () => {
-    const encoder = new TextEncoder();
+    <script>
+        function login() {
+            const password = document.getElementById("password").value;
 
-    async function sha256(text) {
-        const hashBuffer = await crypto.subtle.digest(
-            "SHA-256",
-            encoder.encode(text)
-        );
-        return Array.from(new Uint8Array(hashBuffer))
-            .map(b => b.toString(16).padStart(2, "0"))
-            .join("");
-    }
-
-    const expectedHash =
-        "11f7d063050e24d55f8d3a8a3f42cb3f7d4261b08d071cf8a8dc879bb3d81aee";
-
-    window.login = async function () {
-        const password = document.getElementById("password").value;
-        const hash = await sha256(password);
-
-        if (hash === expectedHash) {
-            window.location.href =
-                "https://dtyear9.github.io/coffee-shop/pos-cafe201234528.html";
-        } else {
-            document.getElementById("error").textContent =
-                "Incorrect password";
+            if (password === "dtcoffeecafe-3528") {
+                window.location.href =
+                    "https://dtyear9.github.io/coffee-shop/pos-cafe201234528.html";
+            } else {
+                document.getElementById("error").textContent =
+                    "Incorrect password.";
+            }
         }
-    };
-})();
-</script>
+    </script>
 
 </body>
 </html>
