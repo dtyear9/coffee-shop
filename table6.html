@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Table 6 Year 9 DT Coffee Shop</title>
+<style>
+:root{--brown:#5d4037;--dark:#4e342e;--cream:#f5eee6;--card:#fff;--line:#e3d8d0;--muted:#766a64}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--cream);color:#3e2723}
+header{background:var(--brown);color:#fff;text-align:center;padding:24px 16px}
+header h1{margin:0;font-size:30px} header p{margin:7px 0 0}
+.container{max-width:1150px;margin:auto;padding:22px 18px 110px}
+.welcome{display:flex;align-items:center;gap:15px;margin-bottom:18px}
+.welcome h2{margin:0;font-size:25px} .welcome p{margin:4px 0;color:var(--muted)}
+.search{margin-left:auto;width:280px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.categories{display:flex;gap:9px;overflow:auto;padding-bottom:4px;margin-bottom:20px}
+.cat{border:1px solid var(--line);background:#fff;color:var(--brown);padding:10px 15px;border-radius:20px;white-space:nowrap;cursor:pointer;font-weight:700}
+.cat.active,.cat:hover{background:var(--brown);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 2px 7px #0000000d;display:flex;flex-direction:column}
+.icon{
+  height:140px;
+  overflow:hidden;
+  background:#faf5f0;
+}
+
+.icon img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .3s ease;
+}
+
+.card:hover .icon img{
+  transform:scale(1.05);
+}
+.card-body{padding:15px;display:flex;flex-direction:column;flex:1}
+.category{font-size:12px;color:var(--muted);margin-bottom:7px}
+.card h3{margin:0;min-height:42px;font-size:18px}
+.price{font-size:17px;font-weight:800;color:var(--brown);margin:11px 0}
+.add{border:0;background:var(--brown);color:#fff;padding:11px;border-radius:8px;font-weight:800;cursor:pointer;margin-top:auto}
+.add:hover{background:var(--dark)}
+.order-bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 18px;box-shadow:0 -3px 12px #0001;z-index:10}
+.order-bar-inner{max-width:1150px;margin:auto;display:flex;align-items:center;gap:15px}
+.order-info{flex:1} .order-info strong{font-size:18px}
+.checkout{background:var(--brown);color:#fff;border:0;border-radius:9px;padding:13px 22px;font-weight:800;cursor:pointer}
+.drawer{position:fixed;inset:0;background:#0005;display:none;z-index:30}
+.drawer.open{display:block}
+.panel{position:absolute;right:0;top:0;height:100%;width:min(470px,100%);background:#fff;padding:22px;overflow:auto}
+.panel-head{display:flex;align-items:center;margin-bottom:14px}
+.panel-head h2{margin:0;flex:1}
+.close{border:0;background:#eee;border-radius:8px;padding:9px 12px;cursor:pointer}
+.item{border-bottom:1px solid #eee;padding:12px 0}
+.item-top{display:flex;gap:8px} .item-name{font-weight:800;flex:1}
+.controls{display:flex;align-items:center;gap:8px;margin-top:8px}
+.qty-btn{width:30px;height:30px;border:1px solid var(--line);background:#faf7f4;border-radius:7px;cursor:pointer}
+.remove{margin-left:auto;border:0;background:transparent;color:#8b5e52;text-decoration:underline;cursor:pointer}
+label{display:block;font-weight:700;margin-top:15px}
+input,textarea{width:100%;padding:11px;margin-top:6px;border:1px solid #cfc3bb;border-radius:8px;font-size:16px}
+textarea{min-height:80px;resize:vertical}
+.total{display:flex;justify-content:space-between;font-size:21px;font-weight:800;padding:17px 0}
+.submit{width:100%;padding:14px;background:var(--brown);color:#fff;border:0;border-radius:9px;font-weight:800;font-size:16px;cursor:pointer}
+.note{font-size:12px;color:var(--muted);line-height:1.4;margin-top:10px}
+.empty{text-align:center;color:var(--muted);padding:30px}
+@media(max-width:650px){
+ .container{padding:15px 12px 105px} .welcome{display:block}
+ .search{width:100%;margin-top:12px} .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .icon{height:90px;font-size:42px} .card-body{padding:11px} .card h3{font-size:15px}
+ .order-bar-inner{gap:8px} .checkout{padding:12px 14px}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>☕ Year 9 DT Coffee Shop</h1>
+<p>Choose your favourites and place your order</p>
+</header>
+
+<main class="container">
+<section class="welcome">
+<div><h2>What would you like?</h2><p>Tap an item to add it to your order.</p></div>
+<input class="search" id="search" placeholder="🔎 Search menu">
+</section>
+<nav class="categories" id="categories"></nav>
+<section class="grid" id="products"></section>
+</main>
+
+<div class="order-bar">
+<div class="order-bar-inner">
+<div class="order-info"><strong>Your order</strong><br><span id="summary">0 items · £0.00</span></div>
+<button class="checkout" id="openBasket">View order &amp; checkout</button>
+</div>
+</div>
+
+<div class="drawer" id="drawer">
+<aside class="panel">
+<div class="panel-head"><h2>Your order</h2><button class="close" id="close">✕</button></div>
+<div id="basket"></div>
+
+<form id="form" action="https://formsubmit.co/year9dtcoffeeshop@outlook.com" method="POST">
+<input type="hidden" name="_subject" value="New Year 9 DT Coffee Shop Order Table 6">
+<input type="hidden" name="_template" value="table">
+<input type="hidden" name="_captcha" value="false">
+<input type="hidden" name="Order Items" id="itemsField">
+<input type="hidden" name="Order Total" id="totalField">
+
+<label for="name">Your name</label>
+<input id="name" name="Customer Name" required placeholder="Enter your name">
+
+<label for="requests">Special requests (optional)</label>
+<textarea name="Special Requests" id="requests" placeholder="Anything we should know?"></textarea>
+
+<div class="total"><span>Total</span><span>£<span id="total">0.00</span></span></div>
+<button class="submit" type="submit">Place Order</button>
+<div class="note">No payment is required. This button sends your order to the coffee shop email through FormSubmit.</div>
+</form>
+</aside>
+</div>
+
+<script>
+const PRODUCTS=[
+{"category": "Pastry", "name": "Butter Croissant", "price": 3.2, "image": "https://img.magnific.com/premium-photo/isolated-white-background-golden-brown-butter-croissant-with-shadow_908985-79722.jpg?w=2000"},
+{"category": "Pastry", "name": "Pain au Chocolat", "price": 3.6, "image": "https://img.magnific.com/photos-premium/pain-au-chocolat-au-chocolat-isole-blanc_142459-134.jpg?semt=ais_hybrid"}, 
+{"category": "Pastry", "name": "Almond Croissant", "price": 4.2, "image": "https://img.magnific.com/photos-premium/delicieux-croissant-aux-amandes_1332475-43957.jpg"},
+{"category": "Pastry", "name": "Pain aux Raisins", "price": 3.8, "image": "https://img.magnific.com/photos-premium/brioche-cannelle_77211-457.jpg"}, 
+{"category": "Pastry", "name": "Palmiers Elephant Ears", "price": 3.4, "image": "https://www.simplyrecipes.com/thmb/C7jjxln55dhFeviVK7Wuk8bZ090=/750x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2008__04__palmiers-horiz-a-1800-dce75ceae4844ac78848ebe1474257cd.jpg"},
+{"category": "Pastry", "name": "Cinnamon Swirl", "price": 4.0, "image": "https://assets.sainsburys-groceries.co.uk/gol/6544225/1/640x640.jpg"}, 
+{"category": "Pâtisserie", "name": "Vanilla Éclair", "price": 5.2, "image": "https://img.magnific.com/photos-premium/eclair-caramel-isole-plaque-blanche_711700-10640.jpg"}, 
+{"category": "Pâtisserie", "name": "Chocolate Éclair", "price": 5.4, "image": "https://img.magnific.com/photos-gratuite/long-eclair-garni-chocolat-fondu-noix_141793-1206.jpg"}, 
+{"category": "Pâtisserie", "name": "Lemon Meringue Tart", "price": 5.8, "image": "https://img.magnific.com/photos-gratuite/tarte-au-citron_74190-64.jpg"}, 
+{"category": "Pâtisserie", "name": "Raspberry Macaron Box (6)", "price": 9.5, "image": "https://img.magnific.com/photos-gratuite/macarons-colores-francais_2829-16622.jpg"}, 
+{"category": "Pâtisserie", "name": "Paris-Brest", "price": 6.2, "image": "https://tse1.mm.bing.net/th/id/OIP.jFCufkumYc224pS2zoouwQHaLH?r=0&rs=1&pid=ImgDetMain&o=7&rm=3&adlt=strict"}, 
+{"category": "Pâtisserie", "name": "Canelé de Bordeaux", "price": 3.2, "image": "https://img.magnific.com/photos-premium/vue-haute-angle-nourriture-sucree-planche-decouper_1605434-47770.jpg"}, 
+{"category": "Pâtisserie", "name": "Apple Tarte Tatin", "price": 5.9, "image": "https://img.magnific.com/photos-gratuite/tarte-tatin-sucree-francaise-tarte-aux-pommes-envers-pomme-rouge-fraiche_127032-2710.jpg"}, 
+{"category": "Savoury", "name": "Quiche Lorraine", "price": 7.5, "image": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/quichelorraine_71987_16x9.jpg"},
+{"category": "Savoury", "name": "Spinach & Goat Cheese Quiche", "price": 7.5, "image": "https://www.easycheesyvegetarian.com/wp-content/uploads/2020/06/Spinach-and-goats-cheese-self-crusting-quiche-10.jpg"}, 
+{"category": "Savoury", "name": "Croque Monsieur", "price": 8.9, "image": "https://th.bing.com/th/id/R.4af52c10cc4f53d8edb44a0f19c7362a?rik=aHvDAOyLFuBx4w&pid=ImgRaw&r=0"},
+{"category": "Coffee", "name": "Espresso", "price": 2.5, "image": "https://twochimpscoffee.com/wp-content/uploads/2023/01/perfect-crema-2-scaled.jpg"},
+{"category": "Coffee", "name": "Double Espresso", "price": 3.2, "image": "https://tse1.mm.bing.net/th/id/OIP.bPkpGNONfTmkT6XT9CKrUQHaFA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"},
+{"category": "Coffee", "name": "Americano", "price": 3.2, "image": "https://images.surferseo.art/3e642cd8-2b4b-4f34-9cc0-ff59f7a6ca93.png"},
+{"category": "Coffee", "name": "Café Crème", "price": 4.0, "image": "https://static.pratique.fr/images/unsized/cr/creme-cafe.jpg"}, 
+{"category": "Coffee", "name": "Cappuccino", "price": 4.2, "image": "https://th.bing.com/th/id/R.3def92d3517ba909b24fc31de90c8aff?rik=fcP0C08Xgm53KQ&pid=ImgRaw&r=0"}, 
+{"category": "Coffee", "name": "Flat White", "price": 4.2, "image": "https://th.bing.com/th/id/R.d91bd90878b6b61195b824e276b1e435?rik=BJmt7zbQdKEAmQ&riu=http%3a%2f%2fknowyourgrinder.com%2fwp-content%2fuploads%2f2016%2f02%2fflatwhite-coffee.jpg&ehk=RBJtRFdPh5pjEAVZXTLrah59uDNzy9mc%2bbFkycDhjyk%3d&risl=&pid=ImgRaw&r=0"},
+{"category": "Coffee", "name": "Caffè Latte", "price": 4.4, "image": "https://tse3.mm.bing.net/th/id/OIP.6Lb2xzBM3B6maFHPDwhw5AHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"}, 
+{"category": "Coffee", "name": "Cortado", "price": 3.8, "image": "https://i.pinimg.com/originals/66/b3/09/66b3097c6d2845f8dbd7b8e92c301447.png"}, 
+{"category": "Coffee", "name": "Mocha", "price": 4.6, "image": "https://tse2.mm.bing.net/th/id/OIP.kHtlVkZLR0VxUjoONREB4wHaJo?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"}, 
+{"category": "Coffee", "name": "Macchiato", "price": 3.6, "image": "https://tse1.mm.bing.net/th/id/OIP.uC9RcV3lK1I1X2INid7e3AHaEO?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"}, 
+{"category": "Coffee", "name": "Iced Latte", "price": 4.5, "image": "https://tastylicious.com/wp-content/uploads/2023/01/a-glass-of-iced-latte-on-a-wooden-table.jpg"},
+{"category": "Coffee", "name": "Iced Americano", "price": 3.8, "image": "https://tse2.mm.bing.net/th/id/OIP.Td6QlUQ5NTbigDQDob0DpQHaJQ?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"}, 
+{"category": "Hot Chocolate", "name": "Classic Hot Chocolate", "price": 4.5, "image": "https://itstasty.net/wp-content/uploads/2025/10/teamred1990_httpss.mj_.run_d9EigH_lac_A_warm_glass_of_classic__7c79e05e-d3d2-481d-91d6-b97674d70f07_0.png"}, 
+{"category": "Hot Chocolate", "name": "Dark Chocolate", "price": 4.8, "image": "https://foreverfeeding.com/wp-content/uploads/2025/12/Vegan-Dark-Hot-Chocolate.png"}, 
+{"category": "Hot Chocolate", "name": "Vanilla Hot Chocolate", "price": 4.8, "image": "https://myyumcookies.com/assets/images/1766346290135-7w0a8bv5.webp"}, 
+{"category": "Hot Chocolate", "name": "Salted Caramel Hot Chocolate", "price": 5.0, "image": "https://violarecipes.com/wp-content/uploads/2025/09/featured_salted_caramel_hot_chocolate.jpg"}, 
+{"category": "Milkshakes", "name": "Classic Vanilla", "price": 5.5, "image": "https://tse4.mm.bing.net/th/id/OIP.XBbdSf1zyuIITK8fOHpOPwHaLH?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"}, 
+{"category": "Milkshakes", "name": "Chocolate", "price": 5.7, "image": "https://insanelygoodrecipes.com/wp-content/uploads/2024/02/Chocolate-Milkshake-and-Cookie-on-Wooden-Table.jpg"}, 
+{"category": "Milkshakes", "name": "Strawberry", "price": 5.7, "image": "https://tse3.mm.bing.net/th/id/OIP.bQItuRw9hA8RvnNfAscZIQHaLH?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"}, 
+{"category": "Milkshakes", "name": "Salted Caramel", "price": 5.9, "image": "https://tse1.mm.bing.net/th/id/OIP.BzFAnXqsduBfFZDjewVONQHaNK?r=0&w=810&h=1440&rs=1&pid=ImgDetMain&o=7&rm=3"},
+{"category": "Milkshakes", "name": "Cookies & Cream", "price": 5.9, "image": "https://tse3.mm.bing.net/th/id/OIP.2YXOxqayiOcrcDWeOQYkUQHaLH?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"}, 
+{"category": "Smoothies", "name": "Strawberry & Banana", "price": 5.5, "image": "https://tse4.mm.bing.net/th/id/OIP.pUWUMElcOCY1VFr5DwY_9gHaLH?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"}, 
+{"category": "Smoothies", "name": "Mango & Passion Fruit", "price": 5.8, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUeeu576V5tHOz7nlNZJu5cV1CqrsQ_WMqJ4pURGhMEOGn8r5jqtSwM34:https://lookaside.instagram.com/seo/google_widget/crawler/%3Fmedia_id%3D3776871555050701054&s=10"},
+{"category": "Smoothies", "name": "Mixed Berry", "price": 5.8, "image": "https://www.dinneratthezoo.com/wp-content/uploads/2017/01/mixed-berry-smoothie-2.jpg"}, 
+{"category": "Smoothies", "name": "Tropical", "price": 5.8, "image": "https://sweetandsavorymeals.com/wp-content/uploads/2024/04/homemade-tropical-smoothie-680x1020.jpg"}, 
+{"category": "Smoothies", "name": "Green Apple & Spinach", "price": 5.7, "image": "https://sweetandsavorymeals.com/wp-content/uploads/2023/08/homemade-spinach-smoothie.jpg.webp"},
+{"category": "Tea & Refreshments", "name": "Earl Grey Tea", "price": 3.2, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIwGvRaY_hzOa5IMBiT8YdIEk8MND6dUNaGrZ9uj8jS1cR3Y1spOGhRJmL:tucsontea.com/cdn/shop/files/SP-earl-grey-1000x1000.jpg%3Fv%3D1734910209&s=10"}, 
+{"category": "Tea & Refreshments", "name": "English Breakfast Tea", "price": 3.2, "image": "https://newenglishteas.com/cdn/shop/files/english-breakfast-teabags-refill-new-english-teas.webp?v=1780685957&width=533"},
+{"category": "Tea & Refreshments", "name": "Chamomile Tea", "price": 3.2, "image": "https://images.immediate.co.uk/production/volatile/sites/30/2020/06/Chamomile-tea-in-a-tea-cup-61063da.jpg"},
+{"category": "Tea & Refreshments", "name": "Fresh Mint Tea", "price": 3.4, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrYN4xYHiqU_m7ThDK2l8te8pL0suwGApYgW6-rTKv6qPnGHS2FTdoA7k:https://4ecoshop.co.uk/img/cms/how-to-make-mint-tea.jpg&s=10"},
+{"category": "Tea & Refreshments", "name": "Fresh Lemonade", "price": 4.5, "image": "https://i0.wp.com/thejoyfilledkitchen.com/wp-content/uploads/2021/04/Lemonade-2-2-e1618520315551.jpg?fit=2641%2C3967&ssl=1"},
+{"category": "Tea & Refreshments", "name": "Peach Iced Tea", "price": 4.5, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR91HJw8qfThm1J7Ntl1h8NsbQfjv0L48sIqPl3fS7-ySM4POte91lrXVc:https://blog.redstickspice.com/wp-content/uploads/2024/12/iced-peach-tea-cocktail-WEB.png&s=10"}, 
+{"category": "Tea & Refreshments", "name": "Sparkling Elderflower", "price": 4.2, "image": "https://veganonboard.com/wp-content/uploads/2020/05/elderflower_cordial_glass-1.jpeg"}];
+let basket=[];
+let active="All";
+let search="";
+
+
+function esc(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[c])}
+function money(n){return Number(n).toFixed(2)}
+function renderCats(){
+ const cats=["All",...new Set(PRODUCTS.map(p=>p.category))];
+ document.getElementById("categories").innerHTML=cats.map(c=>`<button class="cat ${c===active?"active":""}" onclick="setCat('${esc(c).replace(/'/g,"\\'")}')">${esc(c)}</button>`).join("");
+}
+function setCat(c){active=c;renderCats();renderProducts()}
+function renderProducts(){
+ const q=search.toLowerCase();
+ const list=PRODUCTS.map((p,i)=>({...p,i})).filter(p=>(active==="All"||p.category===active)&&p.name.toLowerCase().includes(q));
+ document.getElementById("products").innerHTML=list.length?list.map(p=>`
+ <article class="card">
+  <div class="icon"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy"></div>
+  <div class="card-body">
+   <div class="category">${esc(p.category)}</div>
+   <h3>${esc(p.name)}</h3>
+   <div class="price">£${money(p.price)}</div>
+   <button class="add" onclick="add(${p.i})">Add to order</button>
+  </div>
+ </article>`).join(""):`<div class="empty">No products found.</div>`;
+}
+function add(i){
+ const p=PRODUCTS[i], x=basket.find(x=>x.name===p.name&&x.category===p.category);
+ if(x)x.qty++;else basket.push({...p,qty:1});
+ renderBasket();
+}
+function change(i,n){basket[i].qty+=n;if(basket[i].qty<=0)basket.splice(i,1);renderBasket()}
+function removeItem(i){basket.splice(i,1);renderBasket()}
+function renderBasket(){
+ const count=basket.reduce((s,x)=>s+x.qty,0);
+ const total=basket.reduce((s,x)=>s+x.qty*x.price,0);
+ document.getElementById("summary").textContent=`${count} item${count===1?"":"s"} · £${money(total)}`;
+ document.getElementById("total").textContent=money(total);
+ document.getElementById("basket").innerHTML=basket.length?basket.map((x,i)=>`
+ <div class="item">
+  <div class="item-top"><span class="item-name">${esc(x.name)}</span><b>£${money(x.qty*x.price)}</b></div>
+  <div class="note">£${money(x.price)} each</div>
+  <div class="controls">
+   <button type="button" class="qty-btn" onclick="change(${i},-1)">−</button>
+   <span>${x.qty}</span>
+   <button type="button" class="qty-btn" onclick="change(${i},1)">+</button>
+   <button type="button" class="remove" onclick="removeItem(${i})">Remove</button>
+  </div>
+ </div>`).join(""):`<div class="empty">Your order is empty.<br>Add something from the menu first.</div>`;
+}
+document.getElementById("search").oninput=e=>{search=e.target.value;renderProducts()};
+document.getElementById("openBasket").onclick=()=>document.getElementById("drawer").classList.add("open");
+document.getElementById("close").onclick=()=>document.getElementById("drawer").classList.remove("open");
+document.getElementById("drawer").onclick=e=>{if(e.target.id==="drawer")e.currentTarget.classList.remove("open")};
+document.getElementById("form").onsubmit=e=>{
+ if(!basket.length){e.preventDefault();alert("Please add at least one item to your order.");return}
+ const name=document.getElementById("name").value.trim(), cls=document.getElementById("class").value.trim();
+ if(!name||!cls){e.preventDefault();return}
+ const lines=basket.map(x=>`${x.name} × ${x.qty} = £${money(x.qty*x.price)}`);
+ const total=basket.reduce((s,x)=>s+x.qty*x.price,0);
+ document.getElementById("itemsField").value=lines.join("\n");
+ document.getElementById("totalField").value="£"+money(total)+" (no payment required)";
+};
+renderCats();renderProducts();renderBasket();
+</script>
+</body>
+</html>
