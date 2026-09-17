@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Maison Du Café | Cambridge</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#faf8f5;
+    color:#333;
+    line-height:1.6;
+}
+
+/* Header */
+header{
+    background:#2f2118;
+    color:white;
+    padding:20px 8%;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:1.8rem;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:25px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    font-weight:500;
+}
+
+nav a:hover{
+    color:#d4a373;
+}
+
+/* Hero */
+.hero{
+    height:90vh;
+    background:
+    linear-gradient(rgba(0,0,0,0.45),
+    rgba(0,0,0,0.45)),
+    url("https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1600&q=80");
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    color:white;
+    padding:20px;
+}
+
+.hero-content h1{
+    font-size:4rem;
+    margin-bottom:15px;
+}
+
+.hero-content p{
+    font-size:1.2rem;
+    margin-bottom:25px;
+}
+
+.btn{
+    display:inline-block;
+    padding:14px 30px;
+    background:#d4a373;
+    color:white;
+    text-decoration:none;
+    border-radius:6px;
+    font-weight:bold;
+}
+
+.btn:hover{
+    background:#bc8a5a;
+}
+
+/* Sections */
+section{
+    padding:80px 10%;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:40px;
+    color:#2f2118;
+    font-size:2.3rem;
+}
+
+/* About */
+.about{
+    max-width:900px;
+    margin:auto;
+    text-align:center;
+}
+
+/* Menu */
+.menu-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    text-align:center;
+}
+
+.card h3{
+    color:#2f2118;
+    margin-bottom:10px;
+}
+
+.price{
+    color:#d4a373;
+    font-weight:bold;
+    font-size:1.1rem;
+}
+
+/* Location */
+.location-box{
+    max-width:800px;
+    margin:auto;
+    background:white;
+    padding:35px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    text-align:center;
+}
+
+iframe{
+    width:100%;
+    height:350px;
+    border:none;
+    border-radius:10px;
+    margin-top:25px;
+}
+
+/* Footer */
+footer{
+    background:#2f2118;
+    color:white;
+    text-align:center;
+    padding:25px;
+}
+
+@media(max-width:768px){
+
+    .hero-content h1{
+        font-size:2.5rem;
+    }
+
+    nav{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    nav ul{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <div class="logo">☕ Le Maison Du Café</div>
+
+        <ul>
+            <li>#aboutAbout</a></li>
+            <li>#menuMenu</a></li>
+            <li>#find-usFind Us</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Le Maison Du Café</h1>
+        <p>Fresh Coffee • Handmade Pastries • A Warm Welcome</p>
+        <aenuExplore Our Menu</a>
+    </div>
+</section>
+
+<section id="about">
+    <h2 class="section-title">About Us</h2>
+
+    <div class="about">
+        <p>
+            Welcome to <strong>Le Maison Du Café</strong>, Cambridge's destination
+            for expertly crafted coffee, fresh pastries, and a relaxing atmosphere.
+            Whether you're stopping by for your morning espresso, meeting friends,
+            or finding a quiet place to work, we're here to make every visit special.
+        </p>
+    </div>
+</section>
+
+<section id="menu">
+    <h2 class="section-title">Our Favourites</h2>
+
+    <div class="menu-grid">
+
+        <div class="card">
+            <h3>Espresso</h3>
+            <p>Rich & bold Italian-style espresso.</p>
+            <p class="price">£2.50</p>
+        </div>
+
+        <div class="card">
+            <h3>Cappuccino</h3>
+            <p>Perfectly balanced coffee and foam.</p>
+            <p class="price">£3.80</p>
+        </div>
+
+        <div class="card">
+            <h3>Vanilla Latte</h3>
+            <p>Smooth espresso with silky milk.</p>
+            <p class="price">£4.20</p>
+        </div>
+
+        <div class="card">
+            <h3>Mocha</h3>
+            <p>Chocolate and espresso combined.</p>
+            <p class="price">£4.50</p>
+        </div>
+
+        <div class="card">
+            <h3>Butter Croissant</h3>
+            <p>Freshly baked every morning.</p>
+            <p class="price">£2.20</p>
+        </div>
+
+        <div class="card">
+            <h3>Blueberry Muffin</h3>
+            <p>Soft, sweet and delicious.</p>
+            <p class="price">£2.80</p>
+        </div>
+
+    </div>
+</section>
+
+<section id="find-us">
+    <h2 class="section-title">Where To Find Us</h2>
+
+    <div class="location-box">
+
+        <h3>📍 Address</h3>
+
+        <p>
+            90 Francis Crick Avenue<br>
+            Cambridge<br>
+            CB2 0BA<br>
+            England
+        </p>
+
+        <br>
+
+        <h3>Opening Hours</h3>
+
+        <p>
+            Monday - Friday: 7:00 AM - 6:00 PM<br>
+            Saturday: 8:00 AM - 5:00 PM<br>
+            Sunday: 8:00 AM - 4:00 PM
+        </p>
+
+        <iframe
+            src="https://maps.google.com/maps?q=90%20Francis%20Crick%20Avenue%20Cambridge%20CB2%200BA&t=&z=15&ie=UTF8&iwloc=&output=embed">
+        </iframe  <a class="btn"
+           target="_blank"
+           href="https://www.google.com/maps/search/?api=1&query=90+Francis+Crick+Avenue+Cambridge+CB2+0BA">
+           Get Directions
+        </a>
+
+    </div>
+</section>
+
+<footer>d
+    </p>
+</footer>
+
+</body>
+</html>
